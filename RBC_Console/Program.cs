@@ -102,7 +102,30 @@ foreach (var val in rBCDataViewModel)
         cnt2++;
     }
 
-    Console.WriteLine(val.BranchId + " <==> " + val.Title + " <==> " + val.Address + " <==> " + string.Join(", ", val.Emaployees.Select(r => r.Name)) + "\n");
+    // Console.WriteLine(val.BranchId + " <==> " + val.Title + " <==> " + val.Address + " <==> " + string.Join(", ", val.Emaployees.Select(r => r.Name)) + "\n");
+    // Console.WriteLine(string.Join(", ", val.Emaployees.Select(r => r.Name)) + string.Join(", ", val.Emaployees.Select(r => r.URL)) +  "\n");
+
+    foreach (var emp in val.Emaployees)
+    {
+        var employeedetails = await callAPI.GetRBCWeathManagmentEmployeeBranch(new System.Net.Http.HttpClient(), emp.URL);
+        string xpathcontact = "//div[contains(@class, 'contact-info')]";
+        var htmlDocumentcontact = new HtmlDocument();
+        htmlDocumentcontact.LoadHtml(employeedetails.ToString());
+
+        var textsNodeContact = htmlDocumentcontact.
+                                            DocumentNode
+                                            .SelectNodes(xpathcontact)
+                                            .Select(x => x.ChildNodes)
+                                            .ToList();
+
+        foreach (HtmlNodeCollection itemNode in textsNodeContact)
+        {
+            var Empnme = itemNode[5];
+            var Empname = Empnme.SelectNodes("//p");
+            var Name = callAPI.ExtractTextFromHtml(Empname[0].InnerHtml.ToString());
+        }           
+    }
+
 }
 
 

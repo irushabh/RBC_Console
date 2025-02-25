@@ -17,7 +17,7 @@ namespace RBC_Console
             var formContent = new FormUrlEncodedContent(new[]
             {
                 new KeyValuePair<string, string>("action", "rbcwm_get_advisors_branches"),
-                new KeyValuePair<string, string>("nonce", "2212ab5f48"),
+                new KeyValuePair<string, string>("nonce", "c2a115e8b2"),
                 new KeyValuePair<string, string>("location_string", SearchValue),
                 new KeyValuePair<string, string>("data_source", "ca")
             });
@@ -39,7 +39,7 @@ namespace RBC_Console
             var formContent = new FormUrlEncodedContent(new[]
             {
                 new KeyValuePair<string, string>("action", "rbcwm_get_advisors_by_branch"),
-                new KeyValuePair<string, string>("nonce", "2212ab5f48"),
+                new KeyValuePair<string, string>("nonce", "c2a115e8b2"),
                 new KeyValuePair<string, string>("branch_id", branchId),
                 new KeyValuePair<string, string>("data_source", "ca")
             });
@@ -56,6 +56,21 @@ namespace RBC_Console
                 return "Error";
             }
         }
+        public async Task<string> GetRBCWeathManagmentEmployeeBranch(HttpClient httpClient, string url)
+        {
+            using HttpResponseMessage response = await httpClient.GetAsync(url);
+            bool ResultCode = response.EnsureSuccessStatusCode().IsSuccessStatusCode;
+            if (ResultCode)
+            {
+                var jsonResponse = await response.Content.ReadAsStringAsync();
+                return jsonResponse;
+            }
+            else
+            {
+                return "Error";
+            }
+        }
+
         public string ExtractTextFromHtml(string html)
         {
             if (html == null)
